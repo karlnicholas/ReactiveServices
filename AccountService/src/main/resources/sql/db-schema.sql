@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS account;
+CREATE TABLE account_entity ( id UUID PRIMARY KEY, firstname VARCHAR(100) NOT NULL, lastname VARCHAR(100) NOT NULL);

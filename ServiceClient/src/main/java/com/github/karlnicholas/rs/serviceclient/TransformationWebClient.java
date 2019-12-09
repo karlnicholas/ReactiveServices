@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.github.karlnicholas.rs.model.account.Account;
+import com.github.karlnicholas.rs.model.account.AccountTransaction;
 
 import reactor.core.publisher.Mono;
 
@@ -23,6 +24,14 @@ public class TransformationWebClient {
 		     .uri("/createaccount")
 		     .contentType(MediaType.APPLICATION_JSON)
 		     .bodyValue(account)
+		     .retrieve()
+		     .bodyToMono(UUID.class);
+	}
+	public Mono<UUID> createTransaction(AccountTransaction accountTransaction) {
+		return webclient.post()
+		     .uri("/createtransaction")
+		     .contentType(MediaType.APPLICATION_JSON)
+		     .bodyValue(accountTransaction)
 		     .retrieve()
 		     .bodyToMono(UUID.class);
 	}

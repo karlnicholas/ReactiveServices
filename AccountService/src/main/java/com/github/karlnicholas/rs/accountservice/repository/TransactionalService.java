@@ -29,7 +29,7 @@ public class TransactionalService {
 
 		return repository.save(account).map(it -> {
 
-			if (it.getFirstname().equals("Dave")) {
+			if (it.getFirstname().equals("Denny")) {
 				throw new IllegalStateException();
 			} else {
 				return it;

@@ -23,6 +23,17 @@ public class AccountWebClient {
 		     .bodyValue(account)
 		     .retrieve()
 		     .bodyToMono(UUID.class);
-			 
+	}
+	public Mono<Account> lookupAccount(String firstname, String lastname  ) {
+		return webclient.get()
+		     .uri("/name/"+firstname+"/"+lastname)
+		     .retrieve()
+		     .bodyToMono(Account.class);
+	}
+	public Mono<UUID> accountIdByName(String firstname, String lastname  ) {
+		return webclient.get()
+		     .uri("/idbyname/"+firstname+"/"+lastname)
+		     .retrieve()
+		     .bodyToMono(UUID.class);
 	}
 }

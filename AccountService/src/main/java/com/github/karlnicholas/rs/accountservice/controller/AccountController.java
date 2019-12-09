@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.karlnicholas.rs.accountservice.entity.AccountEntity;
 import com.github.karlnicholas.rs.accountservice.repository.AccountRepository;
+import com.github.karlnicholas.rs.accountservice.repository.TransactionalService;
 import com.github.karlnicholas.rs.model.account.Account;
 
 import lombok.NonNull;
@@ -22,6 +23,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class AccountController {
 	private final @NonNull AccountRepository accountRepository;
+	private final @NonNull TransactionalService transactionalService;
 	@GetMapping("/{id}")
 	Mono<AccountEntity> getAccountById(@PathVariable UUID id) {
 	    return accountRepository.findById(id);
@@ -30,6 +32,11 @@ public class AccountController {
 	@GetMapping("/name/{firstname}/{lastname}")
 	Mono<AccountEntity> getAccountByAccount(@PathVariable String firstname, @PathVariable String lastname) {
 	    return accountRepository.findByName(firstname, lastname);
+	}
+
+	@GetMapping("/idbyname/{firstname}/{lastname}")
+	Mono<UUID> getAccountIdByAccount(@PathVariable String firstname, @PathVariable String lastname) {
+	    return accountRepository.findByName(firstname, lastname).map(AccountEntity::getId);
 	}
 
 	@GetMapping("/count")

@@ -10,11 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.karlnicholas.rs.accountservice.entity.AccountEntity;
-import com.github.karlnicholas.rs.accountservice.repository.AccountRepository;
-import com.github.karlnicholas.rs.accountservice.repository.TransactionalService;
 import com.github.karlnicholas.rs.model.account.Account;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
@@ -22,36 +19,36 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/account")
 @RequiredArgsConstructor
 public class AccountController {
-	private final @NonNull AccountRepository accountRepository;
-	private final @NonNull TransactionalService transactionalService;
 	@GetMapping("/{id}")
 	Mono<AccountEntity> getAccountById(@PathVariable UUID id) {
-	    return accountRepository.findById(id);
+	    return Mono.just(AccountEntity.builder()
+	    		.firstname("Karl")
+	    		.lastname("Nicholas")
+	    		.id(id)
+	    		.build());
 	}
 	
 	@GetMapping("/name/{firstname}/{lastname}")
 	Mono<AccountEntity> getAccountByAccount(@PathVariable String firstname, @PathVariable String lastname) {
-	    return accountRepository.findByName(firstname, lastname);
+	    return Mono.just(AccountEntity.builder()
+	    		.firstname(firstname)
+	    		.lastname(lastname)
+	    		.id(UUID.randomUUID())
+	    		.build());
 	}
 
 	@GetMapping("/idbyname/{firstname}/{lastname}")
 	Mono<UUID> getAccountIdByAccount(@PathVariable String firstname, @PathVariable String lastname) {
-	    return accountRepository.findByName(firstname, lastname).map(AccountEntity::getId);
+	    return Mono.just(UUID.randomUUID());
 	}
 
 	@GetMapping("/count")
 	Mono<Long> getRecordCount() {
-	    return accountRepository.count();
+	    return Mono.just(100000L);
 	}
 
 	@PostMapping("/createaccount")
 	Mono<UUID> createAccount(@RequestBody Account account) {
-		return accountRepository.save(AccountEntity.builder()
-				.firstname(account.getFirstname())
-				.lastname(account.getLastname())
-				.id(UUID.randomUUID())
-				.newFlag(true)
-				.build())
-			.map(AccountEntity::getId);
+	    return Mono.just(UUID.randomUUID());
 	}
 }

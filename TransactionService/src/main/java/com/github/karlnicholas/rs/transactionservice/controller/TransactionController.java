@@ -1,5 +1,7 @@
 package com.github.karlnicholas.rs.transactionservice.controller;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,10 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.karlnicholas.rs.model.account.Transaction;
+import com.github.karlnicholas.rs.model.account.TransactionType;
 import com.github.karlnicholas.rs.transactionservice.entity.TransactionEntity;
-import com.github.karlnicholas.rs.transactionservice.repository.TransactionRepository;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
@@ -22,29 +23,25 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class TransactionController {
 	
-	private final @NonNull TransactionRepository repository; 
 	@GetMapping("/{id}")
 	Mono<TransactionEntity> getTransactionById(@PathVariable UUID id) {
-	    return repository.findById(id);
+	    return Mono.just(TransactionEntity.builder()
+	    		.id(id)
+	    		.amount(BigDecimal.TEN)
+	    		.trDate(LocalDate.of(2019, 12, 25))
+	    		.type(TransactionType.CREDIT)
+	    		.accountId(UUID.randomUUID())
+	    		.build());
 	}
 
 	@GetMapping("/count")
 	Mono<Long> getRecordCount() {
-	    return repository.count();
+	    return Mono.just(100000L);
 	}
 	
 	@PostMapping("/createtransaction")
 	Mono<UUID> createTransaction(@RequestBody Transaction transaction) {
-		return repository.save(
-			TransactionEntity.builder()
-			.id(UUID.randomUUID())
-			.newFlag(true)
-			.amount(transaction.getAmount())
-			.trDate(transaction.getTrDate())
-			.type(transaction.getType())
-			.build()
-			)
-		.map(TransactionEntity::getId);
+	    return Mono.just(UUID.randomUUID());
 	}
 	
 }

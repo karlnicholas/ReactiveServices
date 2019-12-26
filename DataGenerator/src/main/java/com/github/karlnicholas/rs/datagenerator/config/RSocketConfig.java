@@ -20,6 +20,14 @@ import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 public class RSocketConfig {
+	    @Bean
+	    public RSocketRequester rSocketRequester(RSocketStrategies strategies) {
+	    	return RSocketRequester.builder()
+	    			.rsocketStrategies(strategies)
+	    			.connectWebSocket(URI.create("http://localhost:8091/rsocket"))
+	    			.block();
+	    }
+/*	
 	private static MimeType COMPOSITE_METADATA =
 			MimeTypeUtils.parseMimeType(WellKnownMimeType.MESSAGE_RSOCKET_COMPOSITE_METADATA.getString());
 	
@@ -37,4 +45,5 @@ public class RSocketConfig {
 	RSocketRequester requester(RSocketStrategies strategies) {
 	    return RSocketRequester.wrap(rSocket(), MimeTypeUtils.APPLICATION_JSON, COMPOSITE_METADATA, strategies);
 	}
+*/	
 }

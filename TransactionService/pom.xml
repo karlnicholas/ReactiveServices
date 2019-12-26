@@ -46,10 +46,6 @@
 			<groupId>com.github.karlnicholas.rs</groupId>
 			<artifactId>reactiveservicesmodels</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>com.github.karlnicholas.rs</groupId>
-			<artifactId>serviceclient</artifactId>
-		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

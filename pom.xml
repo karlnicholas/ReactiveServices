@@ -31,11 +31,6 @@
 				<artifactId>reactiveservicesmodels</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
-			<dependency>
-				<groupId>com.github.karlnicholas.rs</groupId>
-				<artifactId>serviceclient</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<modules>
@@ -44,7 +39,6 @@
 		<module>TransformationService</module>
 		<module>DataGenerator</module>
 		<module>TransactionService</module>
-		<module>ServiceClient</module>
 	</modules>
 	<dependencies>
 		<dependency>

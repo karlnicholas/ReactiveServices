@@ -43,8 +43,8 @@
 			<artifactId>reactiveservicesmodels</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.github.karlnicholas.rs</groupId>
-			<artifactId>serviceclient</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-rsocket</artifactId>
 		</dependency>
 	</dependencies>
 

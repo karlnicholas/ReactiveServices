@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.karlnicholas.rs.accountservice.entity.AccountEntity;
-import com.github.karlnicholas.rs.model.account.Account;
+import com.github.karlnicholas.rs.model.account.AccountDto;
 
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
@@ -50,11 +50,11 @@ public class AccountController {
 	}
 
 	@PostMapping("/createaccount")
-	Mono<UUID> createAccount(@RequestBody Account account) {
+	Mono<UUID> createAccount(@RequestBody AccountDto account) {
 	    return Mono.just(UUID.randomUUID());
 	}
     @MessageMapping("createaccounts")
-    public Flux<UUID> createAccounts(Flux<Account> accounts) {
+    public Flux<UUID> createAccounts(Flux<AccountDto> accounts) {
 	    return accounts.map(a->{
 	    	return UUID.randomUUID();
 	    });

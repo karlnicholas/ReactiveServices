@@ -10,6 +10,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountTransaction {
-	private Account account;
+	private AccountDto account;
 	private Transaction transaction;
 }

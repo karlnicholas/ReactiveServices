@@ -8,7 +8,7 @@ import java.util.stream.BaseStream;
 
 import org.springframework.core.io.ClassPathResource;
 
-import com.github.karlnicholas.rs.model.account.Account;
+import com.github.karlnicholas.rs.model.account.AccountDto;
 import com.github.karlnicholas.rs.model.account.AccountTransaction;
 import com.github.karlnicholas.rs.model.account.Transaction;
 import com.github.karlnicholas.rs.model.account.TransactionType;
@@ -16,7 +16,7 @@ import com.github.karlnicholas.rs.model.account.TransactionType;
 import reactor.core.publisher.Flux;
 
 public class DataGenerator {
-	public static Flux<Account> generateAccounts() {
+	public static Flux<AccountDto> generateAccounts() {
 		return fluxAccounts();
 	}
 
@@ -35,13 +35,13 @@ public class DataGenerator {
 			);
 	}
 
-	private static Flux<Account> fluxAccounts() {
+	private static Flux<AccountDto> fluxAccounts() {
 		return Flux.using(() -> 
 			new BufferedReader(new InputStreamReader(new ClassPathResource("data/ExportCSV.csv").getInputStream()))
 				.lines()
 				.map(s->{
 					String[] sa = s.split(" ");
-					return Account.builder()
+					return AccountDto.builder()
 						.firstname(sa[0])
 						.lastname(sa[1])
 						.build();

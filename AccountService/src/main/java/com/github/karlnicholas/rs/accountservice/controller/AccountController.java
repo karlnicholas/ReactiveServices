@@ -2,6 +2,7 @@ package com.github.karlnicholas.rs.accountservice.controller;
 
 import java.util.UUID;
 
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import com.github.karlnicholas.rs.accountservice.entity.AccountEntity;
 import com.github.karlnicholas.rs.model.account.Account;
 
 import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -51,4 +53,10 @@ public class AccountController {
 	Mono<UUID> createAccount(@RequestBody Account account) {
 	    return Mono.just(UUID.randomUUID());
 	}
+    @MessageMapping("createaccounts")
+    public Flux<UUID> createAccounts(Flux<Account> accounts) {
+	    return accounts.map(a->{
+	    	return UUID.randomUUID();
+	    });
+    }
 }

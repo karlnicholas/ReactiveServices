@@ -1,6 +1,5 @@
 package com.github.karlnicholas.rs.datagenerator.config;
 
-import java.net.InetSocketAddress;
 import java.net.URI;
 
 import org.springframework.context.annotation.Bean;

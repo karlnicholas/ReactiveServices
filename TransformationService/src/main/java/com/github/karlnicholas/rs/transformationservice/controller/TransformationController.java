@@ -3,6 +3,7 @@ package com.github.karlnicholas.rs.transformationservice.controller;
 import java.util.UUID;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,12 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.karlnicholas.rs.model.account.Account;
 import com.github.karlnicholas.rs.model.account.AccountTransaction;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Controller
+@RequiredArgsConstructor
 public class TransformationController {
+	private final @NonNull RSocketRequester rSocketRequester;
 /*	
 	@PostMapping("/createaccount")
 	Mono<UUID> createAccount(@RequestBody Account account) {
@@ -36,6 +40,9 @@ public class TransformationController {
     }
     @MessageMapping("createaccounts")
     public Flux<UUID> createAccounts(Flux<Account> accounts) {
-		return accounts.map(a->UUID.randomUUID());
+        return rSocketRequester
+            .route("createaccounts")
+            .data(accounts)
+            .retrieveFlux(UUID.class);
     }
 }

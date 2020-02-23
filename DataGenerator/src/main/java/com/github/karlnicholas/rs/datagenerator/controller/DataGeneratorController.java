@@ -20,7 +20,7 @@ import reactor.core.publisher.Mono;
 public class DataGeneratorController {
     private final @NonNull RSocketRequester rSocketRequester;
     
- 
+ /*
 	@GetMapping("/trigger")
 	public Mono<Long> createAccountsWeb() throws IOException {
         return DataGenerator.generateAccounts()
@@ -35,7 +35,7 @@ public class DataGeneratorController {
 //		.count();
 	}
 
- /*
+*/
 	@GetMapping("/trigger")
 	public Mono<Long> createAccountsWeb() throws IOException {
         return rSocketRequester
@@ -44,7 +44,6 @@ public class DataGeneratorController {
                 .retrieveFlux(UUID.class)
                 .count();
 	}
-*/
 
     @GetMapping("/triggertrans")
 	public Mono<Long> createTransactionsWeb() throws IOException {

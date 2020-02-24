@@ -2,6 +2,7 @@ package com.github.karlnicholas.rs.accountservice.controller;
 
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.karlnicholas.rs.accountservice.entity.AccountEntity;
+import com.github.karlnicholas.rs.accountservice.repository.AccountEntityRepository;
 import com.github.karlnicholas.rs.model.account.AccountDto;
 
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,8 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/account")
 @RequiredArgsConstructor
 public class AccountController {
+	@Autowired
+	private AccountEntityRepository repo;
 	@GetMapping("/{id}")
 	Mono<AccountEntity> getAccountById(@PathVariable UUID id) {
 	    return Mono.just(AccountEntity.builder()
@@ -56,7 +60,12 @@ public class AccountController {
     @MessageMapping("createaccounts")
     public Flux<UUID> createAccounts(Flux<AccountDto> accounts) {
 	    return accounts.map(a->{
-	    	return UUID.randomUUID();
+	    	return repo.save(AccountEntity.builder()
+					.id(UUID.randomUUID())
+					.firstname(a.getFirstname())
+					.lastname(a.getLastname())
+					.build())
+    			.getId();
 	    });
     }
 }

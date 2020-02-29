@@ -39,10 +39,10 @@ public class TransformationController {
 		return Mono.just(UUID.randomUUID());
     }
     @MessageMapping("createaccounts")
-    public Flux<UUID> createAccounts(Flux<AccountDto> accounts) {
+    public Flux<AccountDto> createAccounts(Flux<AccountDto> accounts) {
         return rSocketRequester
             .route("createaccounts")
             .data(accounts)
-            .retrieveFlux(UUID.class);
+            .retrieveFlux(AccountDto.class);
     }
 }

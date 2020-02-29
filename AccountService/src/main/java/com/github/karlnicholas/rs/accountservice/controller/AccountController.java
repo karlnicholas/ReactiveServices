@@ -1,8 +1,8 @@
 package com.github.karlnicholas.rs.accountservice.controller;
 
+import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +15,7 @@ import com.github.karlnicholas.rs.accountservice.entity.AccountEntity;
 import com.github.karlnicholas.rs.accountservice.repository.AccountEntityRepository;
 import com.github.karlnicholas.rs.model.account.AccountDto;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -23,15 +24,11 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/account")
 @RequiredArgsConstructor
 public class AccountController {
-	@Autowired
+	@NonNull
 	private AccountEntityRepository repo;
 	@GetMapping("/{id}")
-	Mono<AccountEntity> getAccountById(@PathVariable UUID id) {
-	    return Mono.just(AccountEntity.builder()
-	    		.firstname("Karl")
-	    		.lastname("Nicholas")
-	    		.id(id)
-	    		.build());
+	Mono<Optional<AccountEntity>> getAccountById(@PathVariable UUID id) {
+	    return Mono.just(repo.findById(id));
 	}
 	
 	@GetMapping("/name/{firstname}/{lastname}")
@@ -58,14 +55,15 @@ public class AccountController {
 	    return Mono.just(UUID.randomUUID());
 	}
     @MessageMapping("createaccounts")
-    public Flux<UUID> createAccounts(Flux<AccountDto> accounts) {
+    public Flux<AccountDto> createAccounts(Flux<AccountDto> accounts) {
 	    return accounts.map(a->{
-	    	return repo.save(AccountEntity.builder()
+	    	a.setId(repo.save(AccountEntity.builder()
 					.id(UUID.randomUUID())
 					.firstname(a.getFirstname())
 					.lastname(a.getLastname())
 					.build())
-    			.getId();
+	    			.getId());
+	    	return a;
 	    });
     }
 }

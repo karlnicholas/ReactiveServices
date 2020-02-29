@@ -1,7 +1,8 @@
 package com.github.karlnicholas.rs.datagenerator.controller;
 
+
 import java.io.IOException;
-import java.util.UUID;
+import java.net.URISyntaxException;
 
 import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.karlnicholas.rs.datagenerator.DataGenerator;
+import com.github.karlnicholas.rs.model.account.AccountDto;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -37,12 +40,11 @@ public class DataGeneratorController {
 
 */
 	@GetMapping("/trigger")
-	public Mono<Long> createAccountsWeb() throws IOException {
-        return rSocketRequester
-                .route("createaccounts")
-                .data(DataGenerator.generateAccounts())
-                .retrieveFlux(UUID.class)
-                .count();
+	public Flux<AccountDto> createAccountsWeb() throws IOException, URISyntaxException {
+    	return rSocketRequester
+        .route("createaccounts")
+        .data(DataGenerator.generateAccounts())
+        .retrieveFlux(AccountDto.class);
 	}
 
     @GetMapping("/triggertrans")

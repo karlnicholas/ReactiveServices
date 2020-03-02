@@ -52,11 +52,25 @@ public class DataGeneratorController {
 
 	@GetMapping("/triggerm")
 	public Mono<AccountDto> createAccountWeb() throws IOException, URISyntaxException {
-		return WebClient.create("http://localhost:8090/createaccount")
+		return webClient
 		.post()
-		.body(BodyInserters.fromProducer(Mono.just(AccountDto.builder().firstname("Karl").lastname("Mniocholas").build()), AccountDto.class))
+		.uri("createaccount")
+		.body(BodyInserters.fromValue(AccountDto.builder().firstname("Karl").lastname("Mniocholas").build()))
 		.retrieve()
 		.bodyToMono(AccountDto.class);
+	}
+
+	@GetMapping("/triggerb")
+	public Flux<AccountDto> createAccountMulti() throws IOException, URISyntaxException {
+		return DataGenerator.generateAccounts()
+		.flatMap(a->{
+			return webClient
+					.post()
+					.uri("createaccount")
+					.body(BodyInserters.fromValue(a))
+					.retrieve()
+					.bodyToMono(AccountDto.class);
+		});
 	}
 
 	@GetMapping("/triggertrans")

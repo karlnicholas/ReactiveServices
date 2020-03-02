@@ -3,7 +3,6 @@ package com.github.karlnicholas.rs.accountservice.controller;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,19 +50,21 @@ public class AccountController {
 	}
 
 	@PostMapping("/createaccount")
-	Mono<UUID> createAccount(@RequestBody AccountDto account) {
-	    return Mono.just(UUID.randomUUID());
-	}
-    @MessageMapping("createaccounts")
-    public Flux<AccountDto> createAccounts(Flux<AccountDto> accounts) {
-	    return accounts.map(a->{
-	    	a.setId(repo.save(AccountEntity.builder()
-					.id(UUID.randomUUID())
-					.firstname(a.getFirstname())
-					.lastname(a.getLastname())
-					.build())
-	    			.getId());
+	Mono<AccountDto> createAccount(@RequestBody Mono<AccountDto> account) {
+	    return account.map(a->{
+			a.setId(
+				repo.save(AccountEntity.builder().firstname(a.getFirstname()).lastname(a.getLastname()).id(UUID.randomUUID()).build()).getId()
+			);
 	    	return a;
 	    });
-    }
+	}
+	@PostMapping("/createaccounts")
+	Flux<AccountDto> createAccounts(@RequestBody Flux<AccountDto> accounts) {
+	    return accounts.map(a->{
+			a.setId(
+				repo.save(AccountEntity.builder().firstname(a.getFirstname()).lastname(a.getLastname()).id(UUID.randomUUID()).build()).getId()
+			);
+	    	return a;
+	    });
+	}
 }
